@@ -1,21 +1,122 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package GUI;
+import Data.Contacto;
+import Data.Agenda;
+import java.awt.Color;
+import javax.swing.table.DefaultTableModel;
+
+
 
 /**
  *
  * @author danny
  */
 public class GUI extends javax.swing.JFrame {
+    private int Posicion=0;
+    private Agenda MiAgenda= new Agenda();
 
+    
+    
     /**
      * Creates new form GUI
      */
     public GUI() {
         initComponents();
+        this.setTitle("Mi agenda");
+//        Lista.setDefaultEditor(null, null);
+        // Mostrar.setBackground(Color.getHSBColor(51, 204, 255));
+    }
+    
+     public static void main(String args[]) {
+       
+        
+        int Posicion=0;
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new GUI().setVisible(true);
+            }
+        });
+    }
+
+         private void Limpiar() {
+        Numero.setText(null);
+        Nombre.setText(null);
+        Correo.setText(null);
+    }
+
+    
+   
+    public void LlenarFila(String str1, String str2, String str3){
+  DefaultTableModel yourModel;
+  yourModel = (DefaultTableModel) Lista.getModel();
+  yourModel.addRow(new Object[]{str1, str2, str3});
+}
+
+    private void Eliminar() {
+        int Fila;
+        String key;
+        try{
+        
+        Fila = Lista.getSelectedRow();
+        key = (String) Lista.getValueAt(Fila,0);
+        RemoverFila(Fila);
+        
+        Agenda.contactos.remove(key);
+        }
+        catch(Exception t){
+            System.out.println("Seleccione un contacto");
+        }
+    }
+    
+      private void RemoverFila(int Fila) {
+      DefaultTableModel yourModel;
+  yourModel = (DefaultTableModel) Lista.getModel();
+try {  
+    yourModel.removeRow(Fila);
+
+}
+catch(Exception e){
+    System.out.println("No hay filas que remover");
+}
+    }
+      
+        private void LimpiarLista() {
+       int i;
+        for (i=0;Lista.getRowCount()+(1*i)>i;++i){
+        RemoverFila(0);
+        }
+    }
+
+    private void LlenarLista() {
+        for(Contacto contactoq: Agenda.contactos.values()){
+            LlenarFila(contactoq.getNombre(),contactoq.getNumero(),contactoq.getCorreo()); 
+        }
+    }
+    
+    private void EditarContacto() {
+        Contacto ContactoEditante;
+        int Fila;
+        String key;
+        try{
+        
+        Fila = Lista.getSelectedRow();
+        key = (String) Lista.getValueAt(Fila,0);
+        ContactoEditante=Agenda.contactos.get(key);
+                
+        RemoverFila(Fila);
+        
+        Agenda.contactos.remove(key);
+        Nombre.setText(ContactoEditante.getNombre());
+        Numero.setText(ContactoEditante.getNumero());
+        Correo.setText(ContactoEditante.getCorreo());
+        
+        }
+        catch(Exception t){
+            System.out.println("Seleccione un contacto");
+        }
     }
 
     /**
@@ -27,67 +128,234 @@ public class GUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        Mostrar = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        Eliminar = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        Lista = new javax.swing.JTable();
+        Editar = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
+        Añadir = new javax.swing.JButton();
+        Limpiar = new javax.swing.JButton();
+        Numero = new javax.swing.JTextField();
+        Nombre = new javax.swing.JTextField();
+        Correo = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu6 = new javax.swing.JMenu();
-        jMenu5 = new javax.swing.JMenu();
-        jMenu4 = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        AgendaB = new javax.swing.JMenu();
+        Guardar = new javax.swing.JMenuItem();
+        Importar = new javax.swing.JMenuItem();
+        Salir = new javax.swing.JMenuItem();
+        Ayuda = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        Mostrar.setToolTipText("");
+        Mostrar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
         jLabel1.setText("Bienvenido a mi agenda");
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jLabel1)
-                .addContainerGap(27, Short.MAX_VALUE))
+        Eliminar.setText("Eliminar contacto");
+        Eliminar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                EliminarMouseClicked(evt);
+            }
+        });
+        Eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EliminarActionPerformed(evt);
+            }
+        });
+
+        Lista.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Nombre", "Numero", "Correo"
+            }
+        ));
+        jScrollPane1.setViewportView(Lista);
+        if (Lista.getColumnModel().getColumnCount() > 0) {
+            Lista.getColumnModel().getColumn(1).setPreferredWidth(100);
+        }
+
+        Editar.setText("Editar Contacto");
+        Editar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                EditarMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout MostrarLayout = new javax.swing.GroupLayout(Mostrar);
+        Mostrar.setLayout(MostrarLayout);
+        MostrarLayout.setHorizontalGroup(
+            MostrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(MostrarLayout.createSequentialGroup()
+                .addGroup(MostrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(MostrarLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addGroup(MostrarLayout.createSequentialGroup()
+                        .addGroup(MostrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(MostrarLayout.createSequentialGroup()
+                                .addGap(104, 104, 104)
+                                .addGroup(MostrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(Eliminar)
+                                    .addComponent(Editar)))
+                            .addGroup(MostrarLayout.createSequentialGroup()
+                                .addGap(115, 115, 115)
+                                .addComponent(jLabel1)))
+                        .addGap(0, 110, Short.MAX_VALUE)))
+                .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
+        MostrarLayout.setVerticalGroup(
+            MostrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(MostrarLayout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Editar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(Eliminar)
+                .addGap(35, 35, 35))
         );
+
+        Añadir.setText("Añadir");
+        Añadir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                AñadirMouseClicked(evt);
+            }
+        });
+        Añadir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AñadirActionPerformed(evt);
+            }
+        });
+        Añadir.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                AñadirKeyPressed(evt);
+            }
+        });
+
+        Limpiar.setText("Limpiar");
+        Limpiar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                LimpiarMouseClicked(evt);
+            }
+        });
+
+        Numero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NumeroActionPerformed(evt);
+            }
+        });
+
+        Nombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NombreActionPerformed(evt);
+            }
+        });
+
+        Correo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CorreoActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Nombre");
+
+        jLabel3.setText("Número");
+
+        jLabel4.setText("Correo");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 238, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(Numero)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(Añadir)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
+                                .addComponent(Limpiar))
+                            .addComponent(Correo)
+                            .addComponent(Nombre, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGap(31, 31, 31))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel3))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 257, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(51, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Numero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Correo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(22, 22, 22)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Añadir)
+                    .addComponent(Limpiar))
+                .addGap(77, 77, 77))
         );
 
-        jMenu1.setText("Agenda");
+        AgendaB.setText("Agenda");
+        AgendaB.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                AgendaBMouseClicked(evt);
+            }
+        });
 
-        jMenu6.setText("Guardar agenda");
-        jMenu1.add(jMenu6);
+        Guardar.setText("Guardar Agenda");
+        Guardar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                GuardarMousePressed(evt);
+            }
+        });
+        AgendaB.add(Guardar);
 
-        jMenu5.setText("Exportar agenda");
-        jMenu1.add(jMenu5);
+        Importar.setText("Importar Agenda");
+        Importar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                ImportarMousePressed(evt);
+            }
+        });
+        AgendaB.add(Importar);
 
-        jMenu4.setText("Importar Agenda");
-        jMenu1.add(jMenu4);
+        Salir.setText("Salir");
+        Salir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                SalirMousePressed(evt);
+            }
+        });
+        AgendaB.add(Salir);
 
-        jMenu3.setText("Salir");
-        jMenu1.add(jMenu3);
+        jMenuBar1.add(AgendaB);
 
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Ayuda");
-        jMenuBar1.add(jMenu2);
+        Ayuda.setText("Ayuda");
+        jMenuBar1.add(Ayuda);
 
         setJMenuBar(jMenuBar1);
 
@@ -97,9 +365,9 @@ public class GUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Mostrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -108,59 +376,115 @@ public class GUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(Mostrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void SalirMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SalirMousePressed
+     System.exit(0);
+    }//GEN-LAST:event_SalirMousePressed
+
+    private void AñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AñadirActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_AñadirActionPerformed
+
+    private void NombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NombreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_NombreActionPerformed
+
+    private void CorreoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CorreoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CorreoActionPerformed
+
+    private void NumeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NumeroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_NumeroActionPerformed
+
+    private void EliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_EliminarActionPerformed
+
+    private void AñadirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AñadirMouseClicked
+        
+        Contacto ContactoTemp = new Contacto (Nombre.getText(),Numero.getText(),Correo.getText());
+        Agenda.AñadirContacto(ContactoTemp);
+        LlenarFila(Nombre.getText(),Numero.getText(),Correo.getText());   
+        Limpiar();
+        
+        
+    }//GEN-LAST:event_AñadirMouseClicked
+
+    private void LimpiarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LimpiarMouseClicked
+        Limpiar();
+    }//GEN-LAST:event_LimpiarMouseClicked
+
+    private void EliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EliminarMouseClicked
+       Eliminar();
+    }//GEN-LAST:event_EliminarMouseClicked
+
+    private void AgendaBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AgendaBMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_AgendaBMouseClicked
+
+    private void GuardarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GuardarMousePressed
+      Agenda.GuardarMiAgenda();
+       
+    }//GEN-LAST:event_GuardarMousePressed
+
+    private void ImportarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ImportarMousePressed
+        LimpiarLista();
+        Agenda.CargarMiAgenda();
+        LlenarLista();
+    }//GEN-LAST:event_ImportarMousePressed
+
+    private void AñadirKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_AñadirKeyPressed
+        
+    }//GEN-LAST:event_AñadirKeyPressed
+
+    private void EditarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EditarMouseClicked
+        EditarContacto();
+        
+        
+    }//GEN-LAST:event_EditarMouseClicked
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new GUI().setVisible(true);
-            }
-        });
-    }
-
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu AgendaB;
+    private javax.swing.JMenu Ayuda;
+    private javax.swing.JButton Añadir;
+    private javax.swing.JTextField Correo;
+    private javax.swing.JButton Editar;
+    private javax.swing.JButton Eliminar;
+    private javax.swing.JMenuItem Guardar;
+    private javax.swing.JMenuItem Importar;
+    private javax.swing.JButton Limpiar;
+    private javax.swing.JTable Lista;
+    private javax.swing.JPanel Mostrar;
+    private javax.swing.JTextField Nombre;
+    private javax.swing.JTextField Numero;
+    private javax.swing.JMenuItem Salir;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu5;
-    private javax.swing.JMenu jMenu6;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
+    
+
+  
+
+  
+
+
+
+
 }

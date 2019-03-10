@@ -15,40 +15,52 @@ import java.io.Serializable;
 
 
 public class Contacto implements Serializable {
-    public static String nombre;
-    public static String numero;
-    public static String correo;
+    private String nombre;
+    private String numero;
+    private String correo;
+    private int Posición;
+
+    public int getPosición() {
+        return Posición;
+    }
+
+    public void setPosición(int Posición) {
+        this.Posición = Posición;
+    }
+    
 
   
     
 
-    public static String getNombre() {
+    public String getNombre() {
         return nombre;
     }
 
-    public static String getNumero() {
+    public String getNumero() {
         return numero;
     }
 
-    public static String getCorreo() {
+    public String getCorreo() {
         return correo;
     }
 
-    public static void setNombre(String nombre) {
-        Contacto.nombre = nombre;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public static void setNumero(String numero) {
-        Contacto.numero = numero;
+    public void setNumero(String numero) {
+        this.numero = numero;
     }
 
-    public static void setCorreo(String correo) {
-        Contacto.correo = correo;
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
-    public Contacto(String nombre, String numero) {
+
+    public Contacto(String nombre, String numero, String correo) {
         this.nombre = nombre;
         this.numero= numero;
+        this.correo= correo;
     }
   
     

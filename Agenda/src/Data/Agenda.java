@@ -1,39 +1,91 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Data;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.ObjectInputStream;
 
-/**
- *
- * @author danny
- */
 public class Agenda implements Serializable {
-    
-    ArrayList<Contacto> contactos = new ArrayList<Contacto>();
 
-    public ArrayList<Contacto> getContactos() {
+    private static Contacto Contacticos[];
+    public static HashMap<String, Contacto> contactos = new HashMap<>();
+
+    public static Contacto[] getContacticos() {
+        return Contacticos;
+    }
+
+    public static void setContacticos(Contacto[] Contacticos) {
+        Agenda.Contacticos = Contacticos;
+    }
+
+    public static HashMap<String, Contacto> getContactos() {
         return contactos;
     }
-    
-    public void AñadirContacto (){
-       // Contacto Contact= new Contacto();
+
+    public static void setContactos(HashMap<String, Contacto> contactos) {
+        Agenda.contactos = contactos;
     }
-    
-     public void EliminarContacto (){
-    
+
+    public static void AñadirContacto(Contacto Contacto1) {
+
+        Contacto put = Agenda.contactos.put(Contacto1.getNombre(), Contacto1);
+
     }
-     
-      public void CargarMiAgenda (){
-    
+
+    public static void CargarMiAgenda() {
+        FileInputStream Cargando;
+        Contacto Contactoi;
+        boolean leyendo=true;
+        LimpiarAgendaActual();
+        try {
+
+            Cargando = new FileInputStream("MiAgenda");
+            ObjectInputStream os = new ObjectInputStream(Cargando);
+            
+            do{
+            try{Object Contactou = os.readObject();
+            Contactoi = (Contacto) Contactou;
+            AñadirContacto(Contactoi);}
+            catch(IOException | ClassNotFoundException e){
+                leyendo=!leyendo;
+                System.out.println("No hay qué leer");
+            }
+            }while(leyendo);
+            
+            
+            os.close();
+        } catch (IOException a) {
+            System.out.println("No se pudo cargar la agenda");
+        }
+        
+        for (Contacto Contactoj : contactos.values()) {
+            System.out.println("Nombre " + Contactoj.getNombre() + "\nNumero " + Contactoj.getNumero() + "\nCorreo " + Contactoj.getCorreo());
+            System.out.println("\n");
+        }
     }
-      
-       public void GuardarMiAgenda (){
-    
+
+    public static void GuardarMiAgenda() {
+
+        FileOutputStream Guardando;
+
+        try {
+            Guardando = new FileOutputStream("MiAgenda");
+
+            ObjectOutputStream os = new ObjectOutputStream(Guardando);
+            for (Contacto Contactoi : contactos.values()) {
+                os.writeObject(Contactoi);
+            }
+            os.close();
+
+        } catch (Exception E) {
+            System.out.println("No se pudo guardar la agenda");
+        }
+    }
+
+    public static void LimpiarAgendaActual() {
+         contactos.clear();
     }
 }
-
