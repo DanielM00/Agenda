@@ -182,7 +182,7 @@ catch(Exception e){
             Lista.getColumnModel().getColumn(1).setPreferredWidth(100);
         }
 
-        Editar.setText("Editar Contacto");
+        Editar.setText("Perra contacto");
         Editar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 EditarMouseClicked(evt);
